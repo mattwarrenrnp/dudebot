@@ -1,11 +1,14 @@
 import time
+import os
+
 from slackclient import SlackClient
 
 from chatterbot import ChatBot
 chatbot = ChatBot("dude")
 chatbot.train("biglebowskiscript")
 
-token = "SLACK TOKEN GOES HERE"
+token = os.environ['SLACK_TOKEN']
+
 sc = SlackClient(token)
 if sc.rtm_connect():
     my_user_id = sc.server.users.find(sc.server.username).id
@@ -23,9 +26,7 @@ if sc.rtm_connect():
                         response = chatbot.get_response(message['text'])
                         sc.rtm_send_message(message['channel'], response)
         except:
-            print messages
-        print messages
-        # print sc.server.users.find('dude')
+            pass
         time.sleep(1)
 else:
-    print "Connection Failed, invalid token?"
+    "Connection Failed, invalid token?"
